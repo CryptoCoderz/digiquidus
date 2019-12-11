@@ -3,11 +3,23 @@ Digiquidus Explorer - 1.6.1
 
 An open source block explorer written in node.js.
 
-### See it in action
+### See this fork in action
 
-*  [DigitalNote XDN](http://digitalnote.blockcrawlers.xyz/)
+*  [DigitalNote XDN](https://xdn-explorer.com/)
 
 *note: If you would like your instance mentioned here contact me*
+
+### Updated Prereqs for this fork
+
+* **LetsEncrypt**
+```
+sudo apt-get -y install aptitude    
+sudo aptitude -y install letsencrypt
+sudo letsencrypt certonly --standalone --email email@example.com --agree-tos -d example.com -d www.example.com
+   ``` 
+* **[ipstack.com](ipstack.com) - sign up for a free account and get API Key**
+
+Also check out [Beginners Guide for Iquidus Explorer Setup](https://gist.github.com/samqju/b9fc6c007f083e6429387051e24da1c3)
 
 ### Requires
 
@@ -136,6 +148,25 @@ Digiquidus Explorer is intended to be generic so it can be used with any wallet 
 If you receive this message when launching the sync script either a) a sync is currently in progress, or b) a previous sync was killed before it completed. If you are certian a sync is not in progress remove the index.pid from the tmp folder in the explorer root directory.
 
     rm tmp/index.pid
+    
+I use script (launched by crontab):
+
+```#!/bin/bash
+   fname="/root/explorer/tmp/index.pid"
+   echo "checking" `date` >> /root/explorer/tmp/scriptran.log 
+   if [[ -f "$fname" ]];
+   then
+        pid=$(</root/explorer/tmp/index.pid)
+        echo $pid
+        if [ killall -0 $pid ]; then
+                echo "script running"  `date` >> /root/explorer/tmp/script.log 
+                exit 1	
+        else
+                rm $fname
+		echo "removed" `date` >> /root/explorer/tmp/script.log 
+        fi
+   fi
+   ```
 
 **exceeding stack size**
 
